@@ -6,16 +6,8 @@ module.exports = function validateRegisterInput(data) {
     data.username = !isEmpty(data.username) ? data.username : '';
     data.password = !isEmpty(data.password) ? data.password : '';
 
-    if(!Validator.isLength(data.username, { min: 2, max: 30 })) {
-        errors.username = 'Username must be between 2 to 30 chars';
-    }
-
-    if(Validator.isEmpty(data.name)) {
+    if(Validator.isEmpty(data.username)) {
         errors.username = 'Username field is required';
-    }
-
-    if(!Validator.isLength(data.password, {min: 6, max: 30})) {
-        errors.password = 'Password must have 6 chars';
     }
 
     if(Validator.isEmpty(data.password)) {

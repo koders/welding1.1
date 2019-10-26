@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loginUser } from '../actions/authentication';
+import { loginUser } from '../../actions/authentication';
 import classnames from 'classnames';
+import "./Login.scss";
+import Logo from "./gjerde-logo.png";
 
 const Login = (props) => {
 
@@ -29,8 +31,8 @@ const Login = (props) => {
     }
 
     return(
-        <div className="container" style={{ marginTop: '50px', width: '700px'}}>
-            <h2 style={{marginBottom: '40px'}}>Login</h2>
+        <div className="login-container">
+            <img className="logo" src={Logo} alt="Login" />
             <form onSubmit={ handleSubmit }>
                 <div className="form-group">
                     <input
@@ -59,8 +61,8 @@ const Login = (props) => {
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                        Login User
+                    <button type="submit" className="btn btn-success">
+                        Login
                     </button>
                 </div>
             </form>

@@ -4,12 +4,13 @@ import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-
 import PropTypes from 'prop-types';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
-import './App.css';
+import './App.scss';
 import './themify/themify-icons.css';
-import Login from './components/Login';
+import Login from './components/Login/Login';
 import store from './store';
 import { logoutUser, setCurrentUser } from './actions/authentication';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Logo from "./components/Login/gjerde-logo.png";
 
 const App = () => {
     return (
@@ -67,7 +68,7 @@ const Container = (props) => {
         <div>
             <div className="sidebar">
                 <div className="logo">
-                    <img src="/gjerde-logo.png" alt="logo" />
+                    <img src={Logo} alt="logo" />
                 </div>
                 <div className="menu">
                     <div className="item">

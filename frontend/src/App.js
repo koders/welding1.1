@@ -35,9 +35,6 @@ const AppInner = (props) => {
                 window.location.href = '/login';
             }
         }
-        return () => {
-            // cleanup
-        };
     }, [])
 
     return (
@@ -55,10 +52,14 @@ const AppInnerWithRouter = withRouter(AppInner);
 const Container = (props) => {
 
     React.useEffect(() => {
-        if (!props.auth.isAuthenticated) {
+        if (!props.auth.isAuthenticated && !localStorage.jwtToken) {
             props.history.push('/login');
         }
     }, [props.auth.isAuthenticated])
+
+    if (!props.auth.isAuthenticated) {
+        return null;
+    }
 
     const selfProps = props;
 
@@ -109,9 +110,11 @@ const Container = (props) => {
             </div>
 
             <div className="page-container">
-                <Route exact path="/" component={Home} />
-                <Route path="/orders" component={Orders} />
-                <Route path="/logout" render={(props) => <Logout {...props} logoutUser={selfProps.logoutUser} />} />
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/orders" component={Orders} />
+                    <Route path="/logout" render={(props) => <Logout {...props} logoutUser={selfProps.logoutUser} />} />
+                </Switch>
             </div>
         </div>
     );

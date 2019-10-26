@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Provider, connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
 import PropTypes from 'prop-types';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -11,76 +11,110 @@ import store from './store';
 import { logoutUser, setCurrentUser } from './actions/authentication';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-if(localStorage.jwtToken) {
-    setAuthToken(localStorage.jwtToken);
-    const decoded = jwt_decode(localStorage.jwtToken);
-    store.dispatch(setCurrentUser(decoded));
-
-    const currentTime = Date.now() / 1000;
-    if(decoded.exp < currentTime) {
-        store.dispatch(logoutUser());
-        window.location.href = '/login'
-    }
+const App = () => {
+    return (
+        <Provider store = { store }>
+            <Router>
+                <AppInnerWithRouter />
+            </Router>
+        </Provider>
+    );
 }
 
-class App extends PureComponent {
-    render = () => {
-        return (
-            <Provider store = { store }>
-                <Router>
-                    <div>
-                        <Switch>
-                            <Route exact path="/login" component={Login} />
-                            <Route path="/" component={ContainerConnected} />
-                        </Switch>
-                    </div>
-                </Router>
-            </Provider>
-        );
-    }
+const AppInner = (props) => {
+
+    React.useEffect(() => {
+        if(localStorage.jwtToken) {
+            setAuthToken(localStorage.jwtToken);
+            const decoded = jwt_decode(localStorage.jwtToken);
+            store.dispatch(setCurrentUser(decoded));
+
+            const currentTime = Date.now() / 1000;
+            if(decoded.exp < currentTime) {
+                store.dispatch(logoutUser(this.props.history));
+                window.location.href = '/login';
+            }
+        }
+        return () => {
+            // cleanup
+        };
+    }, [])
+
+    return (
+        <div>
+            <Switch>
+                <Route exact path="/login" component={Login} />
+                <Route path="/" component={ContainerConnected} />
+            </Switch>
+        </div>
+    );
 }
 
-class Container extends PureComponent {
+const AppInnerWithRouter = withRouter(AppInner);
 
-    componentWillMount = () => {
-        if (!this.props.auth.isAuthenticated) {
-            this.props.history.push('/login');
+const Container = (props) => {
+
+    React.useEffect(() => {
+        if (!props.auth.isAuthenticated) {
+            props.history.push('/login');
         }
-    }
+    }, [props.auth.isAuthenticated])
 
+    const selfProps = props;
 
-    componentWillReceiveProps = (nextProps) => {
-        if (!nextProps.auth.isAuthenticated) {
-            this.props.history.push('/login');
-        }
-    }
-
-    onLogout = (e) => {
-        e.preventDefault();
-        this.props.logoutUser(this.props.history);
-    }
-
-    render = () => {
-        return (
-            <div>
-                <div className="sidebar">
-                    <div className="logo">
-                        <img src="/gjerde-logo.png" alt="logo" />
-                    </div>
-                    <div className="menu">
-                        <div className="item"><Link to="/">Dashboard</Link></div>
-                        <div className="item"><Link to="/orders">Orders</Link></div>
-                        <div className="item" onClick={this.onLogout}>Logout</div>
-                    </div>
+    return (
+        <div>
+            <div className="sidebar">
+                <div className="logo">
+                    <img src="/gjerde-logo.png" alt="logo" />
                 </div>
-
-                <div className="page-container">
-                    <Route exact path="/" component={Home} />
-                    <Route path="/orders" component={Orders} />
+                <div className="menu">
+                    <div className="item">
+                        <Link to="/" className="link">
+                            <span className="icon"><i className="c-blue-500 ti-home" /></span>
+                            <span className="title">Dashboard</span>
+                        </Link>
+                    </div>
+                    <div className="item">
+                        <Link to="/orders" className="link">
+                            <span className="icon"><i className="c-blue-500 ti-receipt" /></span>
+                            <span className="title">Orders</span>
+                        </Link>
+                    </div>
+                    <div className="item">
+                        <Link to="/admin" className="link">
+                            <span className="icon"><i className="c-blue-500 ti-settings" /></span>
+                            <span className="title">Administration</span>
+                        </Link>
+                    </div>
+                    <div className="item">
+                        <Link to="/invoices" className="link">
+                            <span className="icon"><i className="c-blue-500 ti-archive" /></span>
+                            <span className="title">Invoices</span>
+                        </Link>
+                    </div>
+                    <div className="item">
+                        <Link to="/statistics" className="link">
+                            <span className="icon"><i className="c-blue-500 ti-stats-up" /></span>
+                            <span className="title">Statistics</span>
+                        </Link>
+                    </div>
+                    <div className="item">
+                        <Link to="/logout" className="link">
+                            <span className="icon"><i className="c-blue-500 ti-power-off" /></span>
+                            <span className="title">Logout</span>
+                        </Link>
+                    </div>
                 </div>
             </div>
-        );
-    };
+
+            <div className="page-container">
+                <Route exact path="/" component={Home} />
+                <Route path="/orders" component={Orders} />
+                <Route path="/logout" render={(props) => <Logout {...props} logoutUser={selfProps.logoutUser} />} />
+            </div>
+        </div>
+    );
 }
 
 Container.propTypes = {
@@ -105,5 +139,14 @@ const Orders = () => (
         <h2>Orders</h2>
     </div>
 );
+
+const Logout = (props) => {
+    props.logoutUser(props.history);
+    return (
+        <div>
+
+        </div>
+    );
+}
 
 export default App;

@@ -1,3 +1,7 @@
+a {
+  text-decoration: none;
+}
+
 .sidebar {
   width: 220px;
   position: fixed;
@@ -27,6 +31,27 @@
 }
 
 .sidebar .menu .item {
+}
+
+.sidebar .menu .item .link {
+  display: block;
+  padding: 5px 15px;
+  font-size: 15px;
+  color: #72777a;
+  transition: all .3s ease;
+}
+
+.sidebar .menu .item .link:hover {
+  color: #313435;
+  text-decoration: none;
+}
+
+.sidebar .menu .item .link i {
+  font-size: 17px;
+  height: 35px;
+  left: 0;
+  line-height: 35px;
+  margin-right: 14px;
 }
 
 .page-container {

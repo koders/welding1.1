@@ -64,7 +64,8 @@ router.post('/login', (req, res) => {
     User.findOne({username})
         .then(user => {
             if(!user) {
-                errors.username = 'User not found'
+                errors.username = "Username and/or password is incorrect!"
+                errors.password = "Username and/or password is incorrect!"
                 return res.status(404).json(errors);
             }
             bcrypt.compare(password, user.password)
@@ -87,7 +88,8 @@ router.post('/login', (req, res) => {
                         });
                     }
                     else {
-                        errors.password = 'Incorrect Password';
+                        errors.username = '"Username and/or password is incorrect!"';
+                        errors.password = '"Username and/or password is incorrect!"';
                         return res.status(400).json(errors);
                     }
                 });

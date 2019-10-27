@@ -3,9 +3,9 @@ const router = express.Router();
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
+const checkRoles = require("../middlewares/checkRoles");
 
 const User = require('../models/User');
 
@@ -96,7 +96,7 @@ router.post('/login', (req, res) => {
         });
 });
 
-router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/me', checkRoles(["admin"]), (req, res) => {
     return res.json({
         id: req.user.id,
         username: req.user.username,

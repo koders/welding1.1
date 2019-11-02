@@ -50,7 +50,7 @@ const router = express.Router();
 
 const wrongPassError = "Username and/or password is incorrect!";
 
-router.post("/login", (req, res) => {
+router.post("/", (req, res) => {
     const { errors, isValid } = validateLoginInput(req.body);
 
     if (!isValid) {
@@ -94,11 +94,11 @@ router.post("/login", (req, res) => {
         });
 });
 
-router.get("/me", checkRoles(["admin"]), (req, res) => {
-    return res.json({
-        id: req.user.id,
-        username: req.user.username,
-    });
-});
+// router.get("/me", checkRoles(["admin"]), (req, res) => {
+//     return res.json({
+//         id: req.user.id,
+//         username: req.user.username,
+//     });
+// });
 
 module.exports = router;

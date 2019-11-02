@@ -6,12 +6,13 @@ const cors = require("cors");
 const graphqlHTTP = require("express-graphql");
 const config = require("./db");
 const schema = require("./schema/schema");
+const checkRoles = require("./middlewares/checkRoles");
 
-const users = require("./routes/user");
+const login = require("./routes/login");
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     () => { console.log("Database is connected"); },
-    err => { console.log(`Can not connect to the database ${err}`)}
+    err => { console.log(`Can not connect to the database ${err}`); },
 );
 
 const app = express();
@@ -21,16 +22,22 @@ require("./passport")(passport);
 // allow cross-origin requests
 app.use(cors());
 
-// bind express with graphql
-app.use("/graphql", graphqlHTTP({
-    schema,
-    graphiql: true,
-}));
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/api/users", users);
+// bind express with graphql
+// app.use("/api", checkRoles(["user"]), graphqlHTTP({
+app.use("/api", graphqlHTTP({
+    schema,
+    graphiql: true,
+    formatError(err) {
+        return {
+            message: err.message,
+        };
+    },
+}));
+
+app.use("/login", login);
 
 app.get("/", (req, res) => {
     res.send("hello");

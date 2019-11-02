@@ -1,29 +1,22 @@
-const passport = require('passport');
+const passport = require("passport");
 
-function checkRoles(roles) {
-    return function (req, res, next) {
-        passport.authenticate("jwt", { session: false }, function (err, user, info) {
-            if (err){
-                return res.status(403).send('forbidden');
+const checkRoles = roles => {
+    return (req, res, next) => {
+        passport.authenticate("jwt", { session: false }, (err, user, info) => {
+            if (err || !user) {
+                return res.status(403).send("forbidden");
             }
-            else if (!user) {
-                return res.status(403).send('forbidden');
+
+            const hasRole = roles ? roles.some(role => user.roles.includes(role)) : true;
+
+            if (roles.length === 0 || hasRole) {
+                req.user = user;
+                return next();
             }
-            else {
-                if (roles.length == 0) {
-                    req.user = user;
-                    return next();
-                }
-                else if (roles.includes(user.role)) {
-                    req.user = user;
-                    return next();
-                }
-                else {
-                    return res.status(403).send('forbidden');
-                }
-            }
+
+            return res.status(403).send("forbidden");
         })(req, res, next);
-    }
-}
+    };
+};
 
 module.exports = checkRoles;

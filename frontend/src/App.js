@@ -32,7 +32,7 @@ const AppInner = (props) => {
 
             const currentTime = Date.now() / 1000;
             if(decoded.exp < currentTime) {
-                store.dispatch(logoutUser(this.props.history));
+                store.dispatch(logoutUser(props.history));
                 window.location.href = '/login';
             }
         }

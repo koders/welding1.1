@@ -1,21 +1,16 @@
-const Validator = require('validator');
-const isEmpty = require('./isEmpty');
-
 module.exports = function validateLoginInput(data) {
-    let errors = {};
-    data.username = !isEmpty(data.username) ? data.username : '';
-    data.password = !isEmpty(data.password) ? data.password : '';
+    const errors = {};
 
-    if(Validator.isEmpty(data.username)) {
-        errors.username = 'Username is required';
+    if (!data.username) {
+        errors.username = "Username is required";
     }
 
-    if(Validator.isEmpty(data.password)) {
-        errors.password = 'Password is required';
+    if (!data.password) {
+        errors.password = "Password is required";
     }
 
     return {
         errors,
-        isValid: isEmpty(errors)
-    }
-}
+        isValid: Object.keys(errors).length === 0,
+    };
+};

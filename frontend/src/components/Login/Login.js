@@ -30,6 +30,12 @@ const Login = (props) => {
         props.loginUser(user);
     }
 
+    const generalError = typeof errors === "string" && (
+        <div className="alert alert-danger" role="alert">
+            { errors }
+        </div>
+    );
+
     return(
         <div className="login-container">
             <img className="logo" src={Logo} alt="Login" />
@@ -60,6 +66,7 @@ const Login = (props) => {
                     />
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
+                { generalError }
                 <div className="form-group">
                     <button type="submit" className="btn btn-success">
                         Login
@@ -75,4 +82,4 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
 })
 
-export  default connect(mapStateToProps, { loginUser })(Login);
+export default connect(mapStateToProps, { loginUser })(Login);

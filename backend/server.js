@@ -6,7 +6,6 @@ const cors = require("cors");
 const graphqlHTTP = require("express-graphql");
 const config = require("./db");
 const schema = require("./schema/schema");
-const checkRoles = require("./middlewares/checkRoles");
 
 const login = require("./routes/login");
 

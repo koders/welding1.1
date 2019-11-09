@@ -18,7 +18,7 @@ const registerUser = async (username, password, roles) => {
         roles,
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         bcrypt.genSalt(10, (err, salt) => {
             if (err) {
                 throw new Error(`There was an error: ${err}`);

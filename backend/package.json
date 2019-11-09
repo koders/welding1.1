@@ -19,7 +19,7 @@
     "graphql": "^14.5.8",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.4.0",
-    "mongoose": "^5.4.11",
+    "mongoose": "^5.7.5",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0"
   },

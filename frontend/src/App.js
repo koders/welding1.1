@@ -1,16 +1,15 @@
-import React from 'react';
-import { Provider, connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
-import PropTypes from 'prop-types';
-import jwt_decode from 'jwt-decode';
-import setAuthToken from './utils/setAuthToken';
-import './App.scss';
-import './themify/themify-icons.css';
-import Login from './components/Login/Login';
-import store from './store';
-import { logoutUser, setCurrentUser } from './actions/authentication';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Logo from "./components/Login/gjerde-logo.png";
+import React from "react";
+import { Provider, connect } from "react-redux";
+import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
+import "./App.scss";
+import "./themify/themify-icons.css";
+import Login from "./components/Login/Login";
+import store from "./store";
+import { logoutUser as logoutUserAction, setCurrentUser } from "./actions/authentication";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Sidebar } from "./components/Sidebar/Sidebar";
 
 const App = () => {
     return (
@@ -32,11 +31,11 @@ const AppInner = (props) => {
 
             const currentTime = Date.now() / 1000;
             if(decoded.exp < currentTime) {
-                store.dispatch(logoutUser(props.history));
-                window.location.href = '/login';
+                store.dispatch(logoutUserAction(props.history));
+                window.location.href = "/login";
             }
         }
-    }, [])
+    }, [props.history])
 
     return (
         <div>
@@ -50,87 +49,41 @@ const AppInner = (props) => {
 
 const AppInnerWithRouter = withRouter(AppInner);
 
-const Container = (props) => {
-
+const Container = ({ auth, location, history, logoutUser }) => {
     React.useEffect(() => {
-        if (!props.auth.isAuthenticated && !localStorage.jwtToken) {
-            props.history.push('/login');
+        if (!auth.isAuthenticated && !localStorage.jwtToken) {
+            history.push("/login");
         }
-    }, [props.auth.isAuthenticated])
+    }, [auth.isAuthenticated, history])
 
-    if (!props.auth.isAuthenticated) {
+    const renderLogout = React.useCallback(
+        (props) => <Logout {...props} logoutUser={logoutUser} />,
+        [logoutUser],
+    );
+
+    if (!auth.isAuthenticated) {
         return null;
     }
 
-    const selfProps = props;
-
     return (
         <div>
-            <div className="sidebar">
-                <div className="logo">
-                    <img src={Logo} alt="logo" />
-                </div>
-                <div className="menu">
-                    <div className="item">
-                        <Link to="/" className="link">
-                            <span className="icon"><i className="c-blue-500 ti-home" /></span>
-                            <span className="title">Dashboard</span>
-                        </Link>
-                    </div>
-                    <div className="item">
-                        <Link to="/orders" className="link">
-                            <span className="icon"><i className="c-blue-500 ti-receipt" /></span>
-                            <span className="title">Orders</span>
-                        </Link>
-                    </div>
-                    <div className="item">
-                        <Link to="/admin" className="link">
-                            <span className="icon"><i className="c-blue-500 ti-settings" /></span>
-                            <span className="title">Administration</span>
-                        </Link>
-                    </div>
-                    <div className="item">
-                        <Link to="/invoices" className="link">
-                            <span className="icon"><i className="c-blue-500 ti-archive" /></span>
-                            <span className="title">Invoices</span>
-                        </Link>
-                    </div>
-                    <div className="item">
-                        <Link to="/statistics" className="link">
-                            <span className="icon"><i className="c-blue-500 ti-stats-up" /></span>
-                            <span className="title">Statistics</span>
-                        </Link>
-                    </div>
-                    <div className="item">
-                        <Link to="/logout" className="link">
-                            <span className="icon"><i className="c-blue-500 ti-power-off" /></span>
-                            <span className="title">Logout</span>
-                        </Link>
-                    </div>
-                </div>
-            </div>
-
+            <Sidebar pathname={location.pathname} />
             <div className="page-container">
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route path="/orders" component={Orders} />
-                    <Route path="/logout" render={(props) => <Logout {...props} logoutUser={selfProps.logoutUser} />} />
+                    <Route path="/logout" render={renderLogout} />
                 </Switch>
             </div>
         </div>
     );
 }
 
-Container.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-}
-
 const mapStateToProps = (state) => ({
     auth: state.auth,
 })
 
-const ContainerConnected = connect(mapStateToProps, { logoutUser })(Container)
+const ContainerConnected = connect(mapStateToProps, { logoutUser: logoutUserAction })(Container)
 
 const Home = () => (
     <div>

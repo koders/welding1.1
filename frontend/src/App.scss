@@ -55,6 +55,10 @@ a {
             & .link {
                 margin-left: 20px;
             }
+
+            & .item:first-child {
+                margin-top: 0;
+            }
         }
 
         & .toggle {

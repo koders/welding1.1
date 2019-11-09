@@ -1,33 +1,38 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "express-graphql": "^0.9.0",
-    "graphql": "^14.5.8",
-    "gravatar": "^1.8.0",
-    "jsonwebtoken": "^8.4.0",
-    "mongoose": "^5.7.5",
-    "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0"
-  },
-  "devDependencies": {
-    "eslint": "6.6.0",
-    "eslint-config-prettier": "6.5.0",
-    "eslint-plugin-prettier": "3.1.1",
-    "nodemon": "^1.18.10",
-    "prettier": "1.18.2"
-  }
+    "name": "welding-backend",
+    "version": "0.1.0",
+    "author": "Rihards Fridrihsons",
+    "private": true,
+    "license": "UNLICENSED",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint --ext js .",
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.18.3",
+        "cors": "^2.8.5",
+        "express": "^4.16.4",
+        "express-graphql": "^0.9.0",
+        "graphql": "^14.5.8",
+        "gravatar": "^1.8.0",
+        "jsonwebtoken": "^8.4.0",
+        "mongoose": "^5.7.5",
+        "passport": "^0.4.0",
+        "passport-jwt": "^4.0.0"
+    },
+    "devDependencies": {
+        "eslint": "6.6.0",
+        "eslint-config-prettier": "6.5.0",
+        "eslint-plugin-prettier": "3.1.1",
+        "nodemon": "^1.18.10",
+        "husky": "^3.0.9",
+        "prettier": "1.18.2"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn lint"
+        }
+    }
 }

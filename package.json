@@ -1,0 +1,36 @@
+{
+  "name": "welding",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint-backend": "cd backend & yarn lint",
+    "lint-frontend": "cd frontend & yarn lint",
+    "lint": "yarn lint-backend & yarn lint-frontend"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "husky": "^3.0.9"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  },
+  "dependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "global": "^4.4.0",
+    "lerna": "^3.18.4"
+  }
+}

@@ -43,5 +43,5 @@ export const Sidebar = ({ pathname }) => {
                 })}
             </div>
         </div>
-    )
-}
+    );
+};

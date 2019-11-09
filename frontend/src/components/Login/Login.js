@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authentication';
-import classnames from 'classnames';
+import React from "react";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authentication";
+import classnames from "classnames";
 import "./Login.scss";
 import Logo from "./gjerde-logo.png";
 
@@ -26,9 +26,9 @@ const Login = (props) => {
         const user = {
             username,
             password,
-        }
+        };
         props.loginUser(user);
-    }
+    };
 
     const generalError = typeof errors === "string" && (
         <div className="alert alert-danger" role="alert">
@@ -44,8 +44,8 @@ const Login = (props) => {
                     <input
                         type="username"
                         placeholder="Username"
-                        className={classnames('form-control form-control-lg', {
-                            'is-invalid': errors.username,
+                        className={classnames("form-control form-control-lg", {
+                            "is-invalid": errors.username,
                         })}
                         name="username"
                         onChange={ handleUsernameChange }
@@ -57,8 +57,8 @@ const Login = (props) => {
                     <input
                         type="password"
                         placeholder="Password"
-                        className={classnames('form-control form-control-lg', {
-                            'is-invalid': errors.password,
+                        className={classnames("form-control form-control-lg", {
+                            "is-invalid": errors.password,
                         })}
                         name="password"
                         onChange={ handlePasswordChange }
@@ -74,12 +74,12 @@ const Login = (props) => {
                 </div>
             </form>
         </div>
-    )
+    );
 };
 
 const mapStateToProps = (state) => ({
     errors: state.errors,
     isAuthenticated: state.auth.isAuthenticated,
-})
+});
 
 export default connect(mapStateToProps, { loginUser })(Login);

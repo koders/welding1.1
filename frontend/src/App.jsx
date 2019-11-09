@@ -19,7 +19,7 @@ const App = () => {
             </Router>
         </Provider>
     );
-}
+};
 
 const AppInner = (props) => {
 
@@ -35,7 +35,7 @@ const AppInner = (props) => {
                 window.location.href = "/login";
             }
         }
-    }, [props.history])
+    }, [props.history]);
 
     return (
         <div>
@@ -45,7 +45,7 @@ const AppInner = (props) => {
             </Switch>
         </div>
     );
-}
+};
 
 const AppInnerWithRouter = withRouter(AppInner);
 
@@ -54,7 +54,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
         if (!auth.isAuthenticated && !localStorage.jwtToken) {
             history.push("/login");
         }
-    }, [auth.isAuthenticated, history])
+    }, [auth.isAuthenticated, history]);
 
     const renderLogout = React.useCallback(
         (props) => <Logout {...props} logoutUser={logoutUser} />,
@@ -77,13 +77,13 @@ const Container = ({ auth, location, history, logoutUser }) => {
             </div>
         </div>
     );
-}
+};
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
-})
+});
 
-const ContainerConnected = connect(mapStateToProps, { logoutUser: logoutUserAction })(Container)
+const ContainerConnected = connect(mapStateToProps, { logoutUser: logoutUserAction })(Container);
 
 const Home = () => (
     <div>
@@ -104,6 +104,6 @@ const Logout = (props) => {
 
         </div>
     );
-}
+};
 
 export default App;

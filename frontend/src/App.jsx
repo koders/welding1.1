@@ -1,36 +1,52 @@
 import React from "react";
 import { Provider, connect } from "react-redux";
-import { BrowserRouter as Router, Route, Switch, withRouter } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    withRouter,
+} from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import "./App.scss";
 import "./themify/themify-icons.css";
 import Login from "./components/Login/Login";
 import store from "./store";
-import { logoutUser as logoutUserAction, setCurrentUser } from "./actions/authentication";
+import {
+    logoutUser as logoutUserAction,
+    setCurrentUser,
+} from "./actions/authentication";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Sidebar } from "./components/Sidebar/Sidebar";
+import { Users } from "./components/Users/Users";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "@apollo/react-hooks";
+
+const apolloClient = new ApolloClient({
+    uri: "http://localhost:3001/api",
+});
 
 const App = () => {
     return (
-        <Provider store = { store }>
-            <Router>
-                <AppInnerWithRouter />
-            </Router>
-        </Provider>
+        <ApolloProvider client={apolloClient}>
+            <Provider store={store}>
+                <Router>
+                    <AppInnerWithRouter />
+                </Router>
+            </Provider>
+        </ApolloProvider>
     );
 };
 
-const AppInner = (props) => {
-
+const AppInner = props => {
     React.useEffect(() => {
-        if(localStorage.jwtToken) {
+        if (localStorage.jwtToken) {
             setAuthToken(localStorage.jwtToken);
             const decoded = jwt_decode(localStorage.jwtToken);
             store.dispatch(setCurrentUser(decoded));
 
             const currentTime = Date.now() / 1000;
-            if(decoded.exp < currentTime) {
+            if (decoded.exp < currentTime) {
                 store.dispatch(logoutUserAction(props.history));
                 window.location.href = "/login";
             }
@@ -57,7 +73,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
     }, [auth.isAuthenticated, history]);
 
     const renderLogout = React.useCallback(
-        (props) => <Logout {...props} logoutUser={logoutUser} />,
+        props => <Logout {...props} logoutUser={logoutUser} />,
         [logoutUser],
     );
 
@@ -72,6 +88,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route path="/orders" component={Orders} />
+                    <Route path="/users" component={Users} />
                     <Route path="/logout" render={renderLogout} />
                 </Switch>
             </div>
@@ -79,11 +96,14 @@ const Container = ({ auth, location, history, logoutUser }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     auth: state.auth,
 });
 
-const ContainerConnected = connect(mapStateToProps, { logoutUser: logoutUserAction })(Container);
+const ContainerConnected = connect(
+    mapStateToProps,
+    { logoutUser: logoutUserAction },
+)(Container);
 
 const Home = () => (
     <div>
@@ -97,13 +117,9 @@ const Orders = () => (
     </div>
 );
 
-const Logout = (props) => {
+const Logout = props => {
     props.logoutUser(props.history);
-    return (
-        <div>
-
-        </div>
-    );
+    return <div></div>;
 };
 
 export default App;

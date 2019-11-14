@@ -26,6 +26,7 @@ export const Sidebar = ({ pathname }) => {
                     return item.path
                         ? (
                             <SidebarItem
+                                key={item.title}
                                 pathname={item.path}
                                 selected={pathname === item.path}
                                 icon={item.icon}
@@ -34,9 +35,10 @@ export const Sidebar = ({ pathname }) => {
                         )
                         : (
                             <ExpandedSidebarItem
+                                key={item.title}
                                 icon={item.icon}
                                 title={item.title}
-                                pathname={item.path}
+                                pathname={pathname}
                                 items={item.items}
                             />
                         );

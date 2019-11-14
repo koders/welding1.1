@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
-const registerUser = async (username, password, roles) => {
+const registerUser = async (username, password, role) => {
     // TODO add validation
     // if (!isValid) {
     //     return res.status(400).json(errors);
@@ -15,7 +15,7 @@ const registerUser = async (username, password, roles) => {
     const newUser = new User({
         username,
         password,
-        roles,
+        role,
     });
 
     return new Promise((resolve) => {

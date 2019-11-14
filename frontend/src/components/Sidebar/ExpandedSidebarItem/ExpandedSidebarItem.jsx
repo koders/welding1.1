@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { SidebarItem } from "../SidebarItem/SidebarItem";
 
 export const ExpandedSidebarItem = ({ pathname, icon, title, items }) => {
-    const [expanded,setExpanded] = React.useState(false);
+    const [expanded,setExpanded] = React.useState(true);
 
     const toggleAdmin = React.useCallback(() => {
         setExpanded(!expanded);
@@ -17,13 +17,9 @@ export const ExpandedSidebarItem = ({ pathname, icon, title, items }) => {
             </div>
             <i className="toggle ti-angle-right"></i>
             <div className="expanded-content">
-                {/* <div className="link">
-                    <span className="icon"><i className="c-blue-500 ti-user" /></span>
-                    <span className="title">Users</span>
-                </div> */}
-
                 {items.map(item => (
                     <SidebarItem
+                        key={item.title}
                         pathname={item.path}
                         selected={pathname === item.path}
                         icon={item.icon}

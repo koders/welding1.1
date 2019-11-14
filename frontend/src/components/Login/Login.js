@@ -11,7 +11,7 @@ const Login = (props) => {
         if(props.isAuthenticated) {
             props.history.push("/");
         }
-    }, [ props.isAuthenticated ]);
+    }, [ props.isAuthenticated, props.history ]);
 
     const { errors } = props;
 

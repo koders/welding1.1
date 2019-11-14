@@ -17,7 +17,7 @@ const UserType = new GraphQLObjectType({
         id: { type: GraphQLID },
         username: { type: GraphQLString },
         password: { type: GraphQLString },
-        roles: { type: GraphQLList(GraphQLString) },
+        role: { type: GraphQLString },
     }),
 });
 
@@ -64,11 +64,11 @@ const Mutation = new GraphQLObjectType({
             args: {
                 username: { type: GraphQLNonNull(GraphQLString) },
                 password: { type: GraphQLNonNull(GraphQLString) },
-                roles: { type: GraphQLList(GraphQLString) },
+                role: { type: GraphQLNonNull(GraphQLString) },
             },
             resolve(parent, args) {
-                const { username, password, roles } = args;
-                return registerUser(username, password, roles);
+                const { username, password, role } = args;
+                return registerUser(username, password, role);
             },
         },
     },

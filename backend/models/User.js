@@ -11,10 +11,10 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
-    roles: {
-        type: [String],
+    role: {
+        type: String,
         required: true,
-        default: ["user"],
+        default: "user",
     },
     date: {
         type: Date,

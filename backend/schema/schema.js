@@ -1,6 +1,7 @@
 const graphql = require("graphql");
 const User = require("../models/User");
 const registerUser = require("../utils/registerUser");
+const deleteUser = require("../utils/deleteUser");
 
 const {
     GraphQLObjectType,
@@ -69,6 +70,16 @@ const Mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 const { username, password, role } = args;
                 return registerUser(username, password, role);
+            },
+        },
+        deleteUser: {
+            type: UserType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                const { id } = args;
+                return deleteUser(id);
             },
         },
     },

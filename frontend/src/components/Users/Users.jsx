@@ -25,16 +25,30 @@ const ADD_USER = gql`
     }
 `;
 
+const DELETE_USER = gql`
+    mutation deleteUser($id: ID!){
+        deleteUser(id: $id) {
+            id,
+        }
+    }
+`;
+
 export const Users = () => {
     const { loading, error, data } = useQuery(USERS);
     const [addUser, { data: newUserData }] = useMutation(ADD_USER);
+    const [deleteUser] = useMutation(DELETE_USER);
 
     const [show, setShow] = React.useState(false);
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [role, setRole] = React.useState("user");
 
-    const handleClose = React.useCallback(() => setShow(false), []);
+    const handleClose = React.useCallback(() => {
+        setShow(false);
+        setUsername("");
+        setPassword("");
+        setRole("user");
+    }, []);
     const handleShow = React.useCallback(() => setShow(true), []);
     const handleSave = React.useCallback(() => {
         addUser({ variables: {
@@ -50,6 +64,12 @@ export const Users = () => {
     const handleUserChange = (e) => setUsername(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleRoleChange = (e) => setRole(e.target.value);
+    const handleDelete = ({currentTarget}) => {
+        deleteUser({ variables: {
+            id: currentTarget.value,
+        },
+        refetchQueries: [{ query: USERS }] });
+    };
 
     if (loading) {
         return "Loading...";
@@ -69,6 +89,7 @@ export const Users = () => {
                 <div className="header">
                     <div className="username">Username</div>
                     <div className="role">Role</div>
+                    <div className="delete"></div>
                 </div>
                 <div className="body">
                     {data.users.map(user => {
@@ -76,6 +97,11 @@ export const Users = () => {
                             <div className="user" key={user.id}>
                                 <div className="username">{user.username}</div>
                                 <div className="role">{user.role}</div>
+                                <div className="delete">
+                                    <Button variant="danger" value={user.id} onClick={handleDelete}>
+                                        <i className="ti-trash" />
+                                    </Button>
+                                </div>
                             </div>
                         );
                     })}

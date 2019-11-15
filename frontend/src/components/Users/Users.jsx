@@ -1,6 +1,7 @@
 import React from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
+import { Button, Modal, Form } from "react-bootstrap";
 import "./Users.scss";
 
 const USERS = gql`
@@ -13,8 +14,42 @@ const USERS = gql`
     }
 `;
 
+const ADD_USER = gql`
+    mutation AddUser($username: String!, $password: String!, $role: String!){
+        addUser(username: $username, password: $password, role: $role) {
+        id,
+        username,
+        password,
+        role
+        }
+    }
+`;
+
 export const Users = () => {
     const { loading, error, data } = useQuery(USERS);
+    const [addUser, { data: newUserData }] = useMutation(ADD_USER);
+
+    const [show, setShow] = React.useState(false);
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [role, setRole] = React.useState("user");
+
+    const handleClose = React.useCallback(() => setShow(false), []);
+    const handleShow = React.useCallback(() => setShow(true), []);
+    const handleSave = React.useCallback(() => {
+        addUser({ variables: {
+            username,
+            password,
+            role,
+        },
+        refetchQueries: [{ query: USERS }] });
+        handleClose();
+    },
+    [username, password, role, addUser, handleClose]);
+
+    const handleUserChange = (e) => setUsername(e.target.value);
+    const handlePasswordChange = (e) => setPassword(e.target.value);
+    const handleRoleChange = (e) => setRole(e.target.value);
 
     if (loading) {
         return "Loading...";
@@ -24,13 +59,11 @@ export const Users = () => {
         return `Error: ${error}`;
     }
 
-    console.log(data);
-
     return (
         <div className="users">
             <div className="top">
                 <h2>Users</h2>
-                <button type="button" className="btn btn-success">Add New</button>
+                <Button variant="success" onClick={handleShow}>Add New</Button>
             </div>
             <div className="list">
                 <div className="header">
@@ -48,6 +81,42 @@ export const Users = () => {
                     })}
                 </div>
             </div>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>New User</Modal.Title>
+                </Modal.Header>
+                <Form>
+                    <Modal.Body>
+                        <Form.Group controlId="formUsername">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control value={username} onChange={handleUserChange} type="email" placeholder="Username" />
+                        </Form.Group>
+
+                        <Form.Group controlId="formPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control value={password} onChange={handlePasswordChange} type="password" placeholder="Password" />
+                        </Form.Group>
+
+                        <Form.Group controlId="formRole">
+                            <Form.Label>Role</Form.Label>
+                            <Form.Control as="select" value={role} onChange={handleRoleChange}>
+                                <option value="user">user</option>
+                                <option value="admin">admin</option>
+                            </Form.Control>
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="success" onClick={handleSave}>
+                            Save
+                        </Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
+
         </div>
     );
 };

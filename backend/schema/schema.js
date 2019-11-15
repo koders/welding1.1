@@ -1,5 +1,6 @@
 const graphql = require("graphql");
 const User = require("../models/User");
+const Terms = require("../models/Terms");
 const registerUser = require("../utils/registerUser");
 const deleteUser = require("../utils/deleteUser");
 
@@ -19,6 +20,14 @@ const UserType = new GraphQLObjectType({
         username: { type: GraphQLString },
         password: { type: GraphQLString },
         role: { type: GraphQLString },
+    }),
+});
+
+const TermType = new GraphQLObjectType({
+    name: "Terms",
+    fields: () => ({
+        id: { type: GraphQLID },
+        title: { type: GraphQLString },
     }),
 });
 
@@ -54,6 +63,12 @@ const RootQuery = new GraphQLObjectType({
                 return User.findById(id);
             },
         },
+        terms: {
+            type: GraphQLList(TermType),
+            resolve() {
+                return Terms.find({});
+            },
+        },
     },
 });
 
@@ -80,6 +95,28 @@ const Mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 const { id } = args;
                 return deleteUser(id);
+            },
+        },
+        addTerms: {
+            type: TermType,
+            args: {
+                title: { type: GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const { title } = args;
+                const terms = new Terms({ title });
+                return terms.save();
+            },
+        },
+        deleteTerms: {
+            type: TermType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(parent, args) {
+                const { id } = args;
+                const terms = await Terms.findById(id);
+                await terms.delete();
             },
         },
     },

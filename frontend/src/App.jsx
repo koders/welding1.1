@@ -21,6 +21,7 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Users } from "./components/Users/Users";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { Items } from "./components/Items/Items";
 
 const apolloClient = new ApolloClient({
     uri: "http://localhost:3001/api",
@@ -81,6 +82,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
         return null;
     }
 
+    console.log("render");
     return (
         <div>
             <Sidebar pathname={location.pathname} />
@@ -89,6 +91,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
                     <Route exact path="/" component={Home} />
                     <Route path="/orders" component={Orders} />
                     <Route path="/users" component={Users} />
+                    <Route path="/terms" component={() => <Items title={"Terms"} />} />
                     <Route path="/logout" render={renderLogout} />
                 </Switch>
             </div>

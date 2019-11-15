@@ -35,7 +35,7 @@ const DELETE_USER = gql`
 
 export const Users = () => {
     const { loading, error, data } = useQuery(USERS);
-    const [addUser, { data: newUserData }] = useMutation(ADD_USER);
+    const [addUser] = useMutation(ADD_USER);
     const [deleteUser] = useMutation(DELETE_USER);
 
     const [show, setShow] = React.useState(false);
@@ -116,7 +116,7 @@ export const Users = () => {
                     <Modal.Body>
                         <Form.Group controlId="formUsername">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control value={username} onChange={handleUserChange} type="email" placeholder="Username" />
+                            <Form.Control value={username} onChange={handleUserChange} type="text" placeholder="Username" />
                         </Form.Group>
 
                         <Form.Group controlId="formPassword">

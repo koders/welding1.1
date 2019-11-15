@@ -9,6 +9,8 @@ export const ExpandedSidebarItem = ({ pathname, icon, title, items }) => {
         setExpanded(!expanded);
     }, [expanded]);
 
+    const style = expanded ? {height: (items.length * 45) + "px"} : {};
+
     return (
         <div className={classNames("item expandable", { expanded })}>
             <div className="link" onClick={toggleAdmin}>
@@ -16,7 +18,7 @@ export const ExpandedSidebarItem = ({ pathname, icon, title, items }) => {
                 <span className="title">{title}</span>
             </div>
             <i className="toggle ti-angle-right"></i>
-            <div className="expanded-content">
+            <div className="expanded-content" style={style}>
                 {items.map(item => (
                     <SidebarItem
                         key={item.title}

@@ -10,6 +10,7 @@ export const Sidebar = ({ pathname }) => {
         {path: "/orders", icon: "ti-receipt", title: "Orders"},
         {icon: "ti-settings", title: "Administration", expanded: true, items:[
             {path: "/users", icon: "ti-user", title: "Users"},
+            {path: "/terms", icon: "ti-truck", title: "Terms"},
         ]},
         {path: "/invoices", icon: "ti-archive", title: "Invoices"},
         {path: "/statistics", icon: "ti-stats-up", title: "Statistics"},

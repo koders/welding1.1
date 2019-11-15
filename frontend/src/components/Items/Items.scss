@@ -1,4 +1,4 @@
-.users {
+.items {
     padding: 20px;
 
     .top {
@@ -20,7 +20,7 @@
         margin: 10px;
         border-radius: 5px;
         box-shadow: 0 0 3px rgba(0, 0, 0, .3);
-        width: 400px;
+        width: 250px;
 
         & .header {
             opacity: .5;
@@ -29,24 +29,20 @@
             background-color: rgba(0, 0, 0, .1);
         }
 
-        & .header, & .user {
+        & .header, & .terms {
             display: flex;
             padding: 10px 15px;
 
-            & .username {
-                flex-basis: 47%;
-            }
-
-            & .role {
-                flex-basis: 47%;
+            & .title {
+                flex-basis: 80%;
             }
 
             & .delete {
-                flex-basis: 6%;
+                flex-basis: 20%;
             }
         }
 
-        & .user {
+        & .terms {
             border-top: 1px solid rgba(0, 0, 0, .3);
         }
     }

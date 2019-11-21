@@ -1,11 +1,12 @@
 .login-container {
-    width: 400px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     position: absolute;
-    left: 50%;
-    margin-left: -200px;
-    top: 50%;
-    margin-top: -130px;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85));
 
     & .logo {
         margin-bottom: 20px;

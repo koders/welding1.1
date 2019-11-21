@@ -17,6 +17,7 @@ import {
     setCurrentUser,
 } from "./actions/authentication";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "semantic-ui-css/semantic.min.css";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Users } from "./components/Users/Users";
 import ApolloClient from "apollo-boost";

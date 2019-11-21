@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authentication";
-import classnames from "classnames";
 import "./Login.scss";
 import Logo from "./gjerde-logo.png";
+import { Button, Form, Message, Segment } from "semantic-ui-react";
 
 const Login = (props) => {
 
@@ -31,48 +31,47 @@ const Login = (props) => {
     };
 
     const generalError = typeof errors === "string" && (
-        <div className="alert alert-danger" role="alert">
-            { errors }
-        </div>
+        <Message
+            error
+            header="Error"
+            content={errors}
+        />
     );
 
     return(
         <div className="login-container">
-            <img className="logo" src={Logo} alt="Login" />
-            <form onSubmit={ handleSubmit }>
-                <div className="form-group">
-                    <input
-                        type="username"
+            <Segment padded="very">
+                <img className="logo" src={Logo} alt="Login" />
+                <Form onSubmit={ handleSubmit } error={typeof errors === "string"}>
+                    <Form.Input
                         placeholder="Username"
-                        className={classnames("form-control form-control-lg", {
-                            "is-invalid": errors.username,
-                        })}
-                        name="username"
+                        // label="Username"
+                        icon="user"
+                        iconPosition='left'
+                        error={errors.username}
                         onChange={ handleUsernameChange }
                         value={ username }
                     />
-                    {errors.username && (<div className="invalid-feedback">{errors.username}</div>)}
-                </div>
-                <div className="form-group">
-                    <input
+                    <Form.Input
                         type="password"
                         placeholder="Password"
-                        className={classnames("form-control form-control-lg", {
-                            "is-invalid": errors.password,
-                        })}
-                        name="password"
+                        // label="Password"
+                        icon="lock"
+                        iconPosition='left'
+                        error={errors.password}
                         onChange={ handlePasswordChange }
                         value={ password }
                     />
-                    {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                </div>
-                { generalError }
-                <div className="form-group">
-                    <button type="submit" className="btn btn-success">
-                        Login
-                    </button>
-                </div>
-            </form>
+                    <Form.Field>
+                        <Message
+                            error
+                            header="Error"
+                            content={errors}
+                        />
+                    </Form.Field>
+                    <Button type="submit" color="green">Login</Button>
+                </Form>
+            </Segment>
         </div>
     );
 };

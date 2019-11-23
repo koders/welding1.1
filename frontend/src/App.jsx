@@ -21,7 +21,7 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Users } from "./components/Users/Users";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { Items } from "./components/Items/Items";
+import { Terms } from "./components/Terms/Terms";
 import { ToastProvider } from "react-toast-notifications";
 
 const apolloClient = new ApolloClient({
@@ -93,7 +93,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
                     <Route exact path="/" component={Home} />
                     <Route path="/orders" component={Orders} />
                     <Route path="/users" component={Users} />
-                    <Route path="/terms" component={() => <Items title={"Terms"} />} />
+                    <Route path="/terms" component={Terms} />
                     <Route path="/logout" render={renderLogout} />
                 </Switch>
             </div>

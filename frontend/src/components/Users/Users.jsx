@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import "./Users.scss";
-import { Header, Button, Icon, Table, Modal, Form, Message, Image, Segment, Dimmer, Loader, Container} from "semantic-ui-react";
+import { Header, Button, Icon, Table, Modal, Form, Message, Loader } from "semantic-ui-react";
 import { useToasts } from "react-toast-notifications";
 import * as classNames from "classnames";
 
@@ -88,7 +88,7 @@ export const Users = () => {
     return (
         <div className={classNames("users", { loading })}>
             <div className="top">
-                <Header as='h2'>
+                <Header as="h2">
                     <Icon name="users" />
                     <Header.Content>
                         Users
@@ -98,48 +98,50 @@ export const Users = () => {
                 <Button primary icon size="small" onClick={handleShow}><Icon name="user" /> Create New</Button>
             </div>
 
-            <Table style={{ position: "relative" }}>
-                <Table.Header fullWidth>
-                    <Table.Row>
-                        <Table.HeaderCell>Username</Table.HeaderCell>
-                        <Table.HeaderCell>Role</Table.HeaderCell>
-                        <Table.HeaderCell />
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    <div className="loader">
-                        <Loader active inline>Loading...</Loader>
-                    </div>
-                    {error && (
+            <div className="table">
+                <div className="loader">
+                    <Loader active inline>Loading...</Loader>
+                </div>
+                <Table>
+                    <Table.Header fullWidth>
                         <Table.Row>
-                            <Table.Cell colSpan="3">
-                                <Message icon negative>
-                                    <Icon name="ambulance" />
-                                    <Message.Content>
-                                        <Message.Header>Error</Message.Header>
-                                        <p>Could not load table data :(</p>
-                                        <p>Please try reloading the page</p>
-                                        <p>If reload doesn't work, then contact the administrator</p>
-                                    </Message.Content>
-                                </Message>
-                            </Table.Cell>
+                            <Table.HeaderCell width={7}>Username</Table.HeaderCell>
+                            <Table.HeaderCell width={7}>Role</Table.HeaderCell>
+                            <Table.HeaderCell width={2}/>
                         </Table.Row>
-                    )}
-                    {data && data.users.map(user => {
-                        return (
-                            <Table.Row key={user.id}>
-                                <Table.Cell>{user.username}</Table.Cell>
-                                <Table.Cell>{user.role}</Table.Cell>
-                                <Table.Cell>
-                                    <Button icon color="red" value={user.id} onClick={handleDelete}>
-                                        <Icon name="user delete" />
-                                    </Button>
+                    </Table.Header>
+                    <Table.Body>
+                        {error && (
+                            <Table.Row>
+                                <Table.Cell colSpan="3">
+                                    <Message icon negative>
+                                        <Icon name="ambulance" />
+                                        <Message.Content>
+                                            <Message.Header>Error</Message.Header>
+                                            <p>Could not load table data :(</p>
+                                            <p>Please try reloading the page</p>
+                                            <p>If reload doesn't work, then contact the administrator</p>
+                                        </Message.Content>
+                                    </Message>
                                 </Table.Cell>
                             </Table.Row>
-                        );
-                    })}
-                </Table.Body>
-            </Table>
+                        )}
+                        {data && data.users.map(user => {
+                            return (
+                                <Table.Row key={user.id}>
+                                    <Table.Cell>{user.username}</Table.Cell>
+                                    <Table.Cell>{user.role}</Table.Cell>
+                                    <Table.Cell>
+                                        <Button icon color="red" value={user.id} onClick={handleDelete}>
+                                            <Icon name="delete" />
+                                        </Button>
+                                    </Table.Cell>
+                                </Table.Row>
+                            );
+                        })}
+                    </Table.Body>
+                </Table>
+            </div>
 
             <Modal open={show} size="tiny">
                 <Modal.Header>New User</Modal.Header>

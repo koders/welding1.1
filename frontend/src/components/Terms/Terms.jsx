@@ -1,10 +1,10 @@
 import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import { Header, Button, Icon, Modal, Form, Message } from "semantic-ui-react";
+import { Button, Icon, Modal, Form, Message } from "semantic-ui-react";
 import { useToasts } from "react-toast-notifications";
-import "./Terms.scss";
 import { Table } from "../Table/Table";
+import { ItemCRUDTopHeader } from "../ItemCRUDTopHeader/ItemCRUDTopHeader";
 
 const TERMS = gql`
     {
@@ -74,16 +74,12 @@ export const Terms = () => {
 
     return (
         <div className="terms">
-            <div className="top">
-                <Header as="h2">
-                    <Icon name="truck" />
-                    <Header.Content>
-                        Terms
-                        <Header.Subheader>Manage Delivery Terms</Header.Subheader>
-                    </Header.Content>
-                </Header>
-                <Button primary icon size="small" onClick={handleShow}><Icon name="truck" /> Create New</Button>
-            </div>
+            <ItemCRUDTopHeader
+                title="Terms"
+                description="Manage Delivery Terms"
+                icon="truck"
+                handleShow={handleShow}
+            />
 
             <Table
                 handleDelete={handleDelete}
@@ -113,7 +109,7 @@ export const Terms = () => {
                                 content={addTermsError.error && addTermsError.error.message}
                             />
                         </Form.Field>
-                        <Button color="red" onClick={handleClose}>Cancel</Button>
+                        <Button type="button" color="red" onClick={handleClose}>Cancel</Button>
                         <Button color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
                     </Form>
                 </Modal.Content>

@@ -1,11 +1,10 @@
 import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import "./Users.scss";
-import { Header, Button, Icon, Modal, Form, Message } from "semantic-ui-react";
+import { Button, Icon, Modal, Form, Message } from "semantic-ui-react";
 import { useToasts } from "react-toast-notifications";
-import * as classNames from "classnames";
 import { Table } from "../Table/Table";
+import { ItemCRUDTopHeader } from "../ItemCRUDTopHeader/ItemCRUDTopHeader";
 
 const USERS = gql`
     {
@@ -73,7 +72,7 @@ export const Users = () => {
 
     const handleUsernameChange = React.useCallback((e) => setUsername(e.target.value));
     const handlePasswordChange = React.useCallback((e) => setPassword(e.target.value));
-    const handleRoleChange = React.useCallback((e, { value }) => console.log(value) || setRole(value));
+    const handleRoleChange = React.useCallback((_, { value }) => setRole(value));
     const handleDelete = React.useCallback(async ({currentTarget}) => {
         try {
             await deleteUser({ variables: {
@@ -87,17 +86,13 @@ export const Users = () => {
     });
 
     return (
-        <div className={classNames("users", { loading })}>
-            <div className="top">
-                <Header as="h2">
-                    <Icon name="users" />
-                    <Header.Content>
-                        Users
-                        <Header.Subheader>Manage Users</Header.Subheader>
-                    </Header.Content>
-                </Header>
-                <Button primary icon size="small" onClick={handleShow}><Icon name="user" /> Create New</Button>
-            </div>
+        <div className="users">
+            <ItemCRUDTopHeader
+                title="Users"
+                description="Manage Users"
+                icon="user"
+                handleShow={handleShow}
+            />
 
             <Table
                 handleDelete={handleDelete}
@@ -145,7 +140,7 @@ export const Users = () => {
                                 content={addUserError.error && addUserError.error.message}
                             />
                         </Form.Field>
-                        <Button color="red" onClick={handleClose}>Cancel</Button>
+                        <Button type="button" color="red" onClick={handleClose}>Cancel</Button>
                         <Button color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
                     </Form>
                 </Modal.Content>

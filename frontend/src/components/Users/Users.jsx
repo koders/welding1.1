@@ -2,9 +2,10 @@ import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import "./Users.scss";
-import { Header, Button, Icon, Table, Modal, Form, Message, Loader } from "semantic-ui-react";
+import { Header, Button, Icon, Modal, Form, Message } from "semantic-ui-react";
 import { useToasts } from "react-toast-notifications";
 import * as classNames from "classnames";
+import { Table } from "../Table/Table";
 
 const USERS = gql`
     {
@@ -98,50 +99,17 @@ export const Users = () => {
                 <Button primary icon size="small" onClick={handleShow}><Icon name="user" /> Create New</Button>
             </div>
 
-            <div className="table">
-                <div className="loader">
-                    <Loader active inline>Loading...</Loader>
-                </div>
-                <Table>
-                    <Table.Header fullWidth>
-                        <Table.Row>
-                            <Table.HeaderCell width={7}>Username</Table.HeaderCell>
-                            <Table.HeaderCell width={7}>Role</Table.HeaderCell>
-                            <Table.HeaderCell width={2}/>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {error && (
-                            <Table.Row>
-                                <Table.Cell colSpan="3">
-                                    <Message icon negative>
-                                        <Icon name="ambulance" />
-                                        <Message.Content>
-                                            <Message.Header>Error</Message.Header>
-                                            <p>Could not load table data :(</p>
-                                            <p>Please try reloading the page</p>
-                                            <p>If reload doesn't work, then contact the administrator</p>
-                                        </Message.Content>
-                                    </Message>
-                                </Table.Cell>
-                            </Table.Row>
-                        )}
-                        {data && data.users.map(user => {
-                            return (
-                                <Table.Row key={user.id}>
-                                    <Table.Cell>{user.username}</Table.Cell>
-                                    <Table.Cell>{user.role}</Table.Cell>
-                                    <Table.Cell>
-                                        <Button icon color="red" value={user.id} onClick={handleDelete}>
-                                            <Icon name="delete" />
-                                        </Button>
-                                    </Table.Cell>
-                                </Table.Row>
-                            );
-                        })}
-                    </Table.Body>
-                </Table>
-            </div>
+            <Table
+                handleDelete={handleDelete}
+                loading={loading}
+                error={error}
+                data={data}
+                field="users"
+                cells={[
+                    {name: "Username", field: "username", width: 7},
+                    {name: "Role", field: "role", width: 7},
+                ]}
+            />
 
             <Modal open={show} size="tiny">
                 <Modal.Header>New User</Modal.Header>

@@ -58,7 +58,7 @@ const Login = (props) => {
                         <Message
                             error
                             header="Error"
-                            content={errors}
+                            content={typeof errors === "string" ? errors : ""}
                         />
                     </Form.Field>
                     <Button type="submit" color="green">Login</Button>

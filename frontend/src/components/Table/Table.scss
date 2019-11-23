@@ -1,0 +1,18 @@
+.data-table {
+    position: relative;
+    width: 400px;
+
+    &.loading > .loader {
+        opacity: 1;
+    }
+
+    & > .loader {
+        transition: opacity 800ms;
+        opacity: 0;
+        z-index: 1;
+        position: absolute;
+        top: 70px;
+        left: 50%;
+        margin-left: -30px;
+    }
+}

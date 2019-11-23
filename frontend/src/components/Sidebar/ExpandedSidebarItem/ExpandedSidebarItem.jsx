@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { SidebarItem } from "../SidebarItem/SidebarItem";
+import { Icon } from "semantic-ui-react";
 
 export const ExpandedSidebarItem = ({ pathname, icon, title, items }) => {
     const [expanded,setExpanded] = React.useState(true);
@@ -14,7 +15,7 @@ export const ExpandedSidebarItem = ({ pathname, icon, title, items }) => {
     return (
         <div className={classNames("item expandable", { expanded })}>
             <div className="link" onClick={toggleAdmin}>
-                <span className="icon"><i className={icon} /></span>
+                <Icon name={icon} />
                 <span className="title">{title}</span>
             </div>
             <i className="toggle ti-angle-right"></i>

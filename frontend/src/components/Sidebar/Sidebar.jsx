@@ -6,15 +6,15 @@ import { ExpandedSidebarItem } from "./ExpandedSidebarItem/ExpandedSidebarItem";
 export const Sidebar = ({ pathname }) => {
 
     const items = [
-        {path: "/", icon: "ti-home", title: "Dashboard"},
-        {path: "/orders", icon: "ti-receipt", title: "Orders"},
-        {icon: "ti-settings", title: "Administration", expanded: true, items:[
-            {path: "/users", icon: "ti-user", title: "Users"},
-            {path: "/terms", icon: "ti-truck", title: "Terms"},
+        {path: "/", icon: "dashboard", title: "Dashboard"},
+        {path: "/orders", icon: "clipboard outline", title: "Orders"},
+        {icon: "settings", title: "Administration", expanded: true, items:[
+            {path: "/users", icon: "users", title: "Users"},
+            {path: "/terms", icon: "truck", title: "Terms"},
         ]},
-        {path: "/invoices", icon: "ti-archive", title: "Invoices"},
-        {path: "/statistics", icon: "ti-stats-up", title: "Statistics"},
-        {path: "/logout", icon: "ti-power-off", title: "Logout"},
+        {path: "/invoices", icon: "file outline", title: "Invoices"},
+        {path: "/statistics", icon: "line graph", title: "Statistics"},
+        {path: "/logout", icon: "sign out", title: "Logout"},
     ];
 
     return (

@@ -1,4 +1,4 @@
-.users {
+.page-container > .users {
     padding: 20px;
 
     &.loading {
@@ -26,41 +26,6 @@
 
         & button {
             margin: 0 30px;
-        }
-    }
-
-    .list {
-        margin: 10px;
-        border-radius: 5px;
-        box-shadow: 0 0 3px rgba(0, 0, 0, .3);
-        width: 400px;
-
-        & .header {
-            opacity: .5;
-            font-size: 1.2rem;
-            font-weight: 500;
-            background-color: rgba(0, 0, 0, .1);
-        }
-
-        & .header, & .user {
-            display: flex;
-            padding: 10px 15px;
-
-            & .username {
-                flex-basis: 47%;
-            }
-
-            & .role {
-                flex-basis: 47%;
-            }
-
-            & .delete {
-                flex-basis: 6%;
-            }
-        }
-
-        & .user {
-            border-top: 1px solid rgba(0, 0, 0, .3);
         }
     }
 }

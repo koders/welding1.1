@@ -1,8 +1,10 @@
 import React from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import { Button, Modal, Form } from "react-bootstrap";
 import "./Users.scss";
+import { Header, Button, Icon, Table, Modal, Form, Message, Image, Segment, Dimmer, Loader, Container} from "semantic-ui-react";
+import { useToasts } from "react-toast-notifications";
+import * as classNames from "classnames";
 
 const USERS = gql`
     {
@@ -35,13 +37,15 @@ const DELETE_USER = gql`
 
 export const Users = () => {
     const { loading, error, data } = useQuery(USERS);
-    const [addUser] = useMutation(ADD_USER);
+    const [addUser, addUserError] = useMutation(ADD_USER);
     const [deleteUser] = useMutation(DELETE_USER);
 
     const [show, setShow] = React.useState(false);
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [role, setRole] = React.useState("user");
+
+    const { addToast } = useToasts();
 
     const handleClose = React.useCallback(() => {
         setShow(false);
@@ -50,99 +54,132 @@ export const Users = () => {
         setRole("user");
     }, []);
     const handleShow = React.useCallback(() => setShow(true), []);
-    const handleSave = React.useCallback(() => {
-        addUser({ variables: {
-            username,
-            password,
-            role,
-        },
-        refetchQueries: [{ query: USERS }] });
-        handleClose();
+    const handleSave = React.useCallback(async () => {
+        try {
+            await addUser({ variables: {
+                username,
+                password,
+                role,
+            },
+            refetchQueries: [{ query: USERS }] });
+            handleClose();
+            addToast("User created", { appearance: "success", autoDismiss: true });
+        } catch (e) {
+            console.error("error", e);
+        }
     },
     [username, password, role, addUser, handleClose]);
 
-    const handleUserChange = (e) => setUsername(e.target.value);
-    const handlePasswordChange = (e) => setPassword(e.target.value);
-    const handleRoleChange = (e) => setRole(e.target.value);
-    const handleDelete = ({currentTarget}) => {
-        deleteUser({ variables: {
-            id: currentTarget.value,
-        },
-        refetchQueries: [{ query: USERS }] });
-    };
-
-    if (loading) {
-        return "Loading...";
-    }
-
-    if (error) {
-        return `Error: ${error}`;
-    }
+    const handleUsernameChange = React.useCallback((e) => setUsername(e.target.value));
+    const handlePasswordChange = React.useCallback((e) => setPassword(e.target.value));
+    const handleRoleChange = React.useCallback((e, { value }) => console.log(value) || setRole(value));
+    const handleDelete = React.useCallback(async ({currentTarget}) => {
+        try {
+            await deleteUser({ variables: {
+                id: currentTarget.value,
+            },
+            refetchQueries: [{ query: USERS }] });
+            addToast("User deleted", { appearance: "success", autoDismiss: true });
+        } catch (e) {
+            console.error(e);
+        }
+    });
 
     return (
-        <div className="users">
+        <div className={classNames("users", { loading })}>
             <div className="top">
-                <h2>Users</h2>
-                <Button variant="success" onClick={handleShow}>Add New</Button>
+                <Header as='h2'>
+                    <Icon name="users" />
+                    <Header.Content>
+                        Users
+                        <Header.Subheader>Manage Users</Header.Subheader>
+                    </Header.Content>
+                </Header>
+                <Button primary icon size="small" onClick={handleShow}><Icon name="user" /> Create New</Button>
             </div>
-            <div className="list">
-                <div className="header">
-                    <div className="username">Username</div>
-                    <div className="role">Role</div>
-                    <div className="delete"></div>
-                </div>
-                <div className="body">
-                    {data.users.map(user => {
+
+            <Table style={{ position: "relative" }}>
+                <Table.Header fullWidth>
+                    <Table.Row>
+                        <Table.HeaderCell>Username</Table.HeaderCell>
+                        <Table.HeaderCell>Role</Table.HeaderCell>
+                        <Table.HeaderCell />
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    <div className="loader">
+                        <Loader active inline>Loading...</Loader>
+                    </div>
+                    {error && (
+                        <Table.Row>
+                            <Table.Cell colSpan="3">
+                                <Message icon negative>
+                                    <Icon name="ambulance" />
+                                    <Message.Content>
+                                        <Message.Header>Error</Message.Header>
+                                        <p>Could not load table data :(</p>
+                                        <p>Please try reloading the page</p>
+                                        <p>If reload doesn't work, then contact the administrator</p>
+                                    </Message.Content>
+                                </Message>
+                            </Table.Cell>
+                        </Table.Row>
+                    )}
+                    {data && data.users.map(user => {
                         return (
-                            <div className="user" key={user.id}>
-                                <div className="username">{user.username}</div>
-                                <div className="role">{user.role}</div>
-                                <div className="delete">
-                                    <Button variant="danger" value={user.id} onClick={handleDelete}>
-                                        <i className="ti-trash" />
+                            <Table.Row key={user.id}>
+                                <Table.Cell>{user.username}</Table.Cell>
+                                <Table.Cell>{user.role}</Table.Cell>
+                                <Table.Cell>
+                                    <Button icon color="red" value={user.id} onClick={handleDelete}>
+                                        <Icon name="user delete" />
                                     </Button>
-                                </div>
-                            </div>
+                                </Table.Cell>
+                            </Table.Row>
                         );
                     })}
-                </div>
-            </div>
+                </Table.Body>
+            </Table>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>New User</Modal.Title>
-                </Modal.Header>
-                <Form>
-                    <Modal.Body>
-                        <Form.Group controlId="formUsername">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control value={username} onChange={handleUserChange} type="text" placeholder="Username" />
-                        </Form.Group>
-
-                        <Form.Group controlId="formPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control value={password} onChange={handlePasswordChange} type="password" placeholder="Password" />
-                        </Form.Group>
-
-                        <Form.Group controlId="formRole">
-                            <Form.Label>Role</Form.Label>
-                            <Form.Control as="select" value={role} onChange={handleRoleChange}>
-                                <option value="user">user</option>
-                                <option value="admin">admin</option>
-                            </Form.Control>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="danger" onClick={handleClose}>
-                            Close
-                        </Button>
-                        <Button variant="success" onClick={handleSave}>
-                            Save
-                        </Button>
-                    </Modal.Footer>
-                </Form>
+            <Modal open={show} size="tiny">
+                <Modal.Header>New User</Modal.Header>
+                <Modal.Content>
+                    <Form error={!!addUserError.error}>
+                        <Form.Input
+                            placeholder="Username"
+                            label="Username"
+                            onChange={ handleUsernameChange }
+                            value={ username }
+                        />
+                        <Form.Input
+                            type="password"
+                            placeholder="Password"
+                            label="Password"
+                            onChange={ handlePasswordChange }
+                            value={ password }
+                        />
+                        <Form.Select
+                            fluid
+                            label="Role"
+                            onChange={handleRoleChange}
+                            value={role}
+                            options={[
+                                { text: "User", value: "user" },
+                                { text: "admin", value: "admin" },
+                            ]}
+                        />
+                        <Form.Field>
+                            <Message
+                                error
+                                header="Error"
+                                content={addUserError.error && addUserError.error.message}
+                            />
+                        </Form.Field>
+                        <Button color="red" onClick={handleClose}>Cancel</Button>
+                        <Button color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
+                    </Form>
+                </Modal.Content>
             </Modal>
-
         </div>
     );
 };

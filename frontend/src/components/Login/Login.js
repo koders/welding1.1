@@ -30,17 +30,9 @@ const Login = (props) => {
         props.loginUser(user);
     };
 
-    const generalError = typeof errors === "string" && (
-        <Message
-            error
-            header="Error"
-            content={errors}
-        />
-    );
-
     return(
         <div className="login-container">
-            <Segment padded="very">
+            <Segment padded="very" className="login-segment">
                 <img className="logo" src={Logo} alt="Login" />
                 <Form onSubmit={ handleSubmit } error={typeof errors === "string"}>
                     <Form.Input

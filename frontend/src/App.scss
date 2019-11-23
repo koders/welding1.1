@@ -6,6 +6,16 @@ html, body {
     // font-family: 'Open Sans', sans-serif !important;
 }
 
+#root {
+    height: 100%;
+   & > div {
+        height: 100%;
+        & > div {
+            height: 100%;
+        }
+    }
+}
+
 a {
     text-decoration: none;
 }
@@ -103,4 +113,10 @@ a {
 
 .page-container {
     margin-left: 220px;
+    height: 100%;
+}
+
+div.ui.modal {
+    height: auto;
+    position: relative;
 }

@@ -6,19 +6,20 @@ const registerUser = async (username, password, role) => {
     // if (!isValid) {
     //     return res.status(400).json(errors);
     // }
+
     const user = await User.findOne({ username });
 
-    if (user) {
-        throw new Error("Username already exists");
-    }
+    return new Promise((resolve, reject) => {
+        if (user) {
+            reject(new Error("Username already exists"));
+        }
 
-    const newUser = new User({
-        username,
-        password,
-        role,
-    });
+        const newUser = new User({
+            username,
+            password,
+            role,
+        });
 
-    return new Promise((resolve) => {
         bcrypt.genSalt(10, (err, salt) => {
             if (err) {
                 throw new Error(`There was an error: ${err}`);
@@ -28,8 +29,12 @@ const registerUser = async (username, password, role) => {
                     throw new Error(`There was an error: ${e}`);
                 }
                 newUser.password = hash;
-                await newUser.save();
-                resolve(newUser);
+                try {
+                    await newUser.save();
+                    resolve(newUser);
+                } catch (error) {
+                    reject(error);
+                }
             });
         });
     });

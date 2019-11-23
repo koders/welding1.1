@@ -16,13 +16,13 @@ import {
     logoutUser as logoutUserAction,
     setCurrentUser,
 } from "./actions/authentication";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "semantic-ui-css/semantic.min.css";
 import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Users } from "./components/Users/Users";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { Items } from "./components/Items/Items";
+import { ToastProvider } from "react-toast-notifications";
 
 const apolloClient = new ApolloClient({
     uri: "http://localhost:3001/api",
@@ -33,7 +33,9 @@ const App = () => {
         <ApolloProvider client={apolloClient}>
             <Provider store={store}>
                 <Router>
-                    <AppInnerWithRouter />
+                    <ToastProvider autoDismissTimeout={3000}>
+                        <AppInnerWithRouter />
+                    </ToastProvider>
                 </Router>
             </Provider>
         </ApolloProvider>
@@ -83,7 +85,6 @@ const Container = ({ auth, location, history, logoutUser }) => {
         return null;
     }
 
-    console.log("render");
     return (
         <div>
             <Sidebar pathname={location.pathname} />

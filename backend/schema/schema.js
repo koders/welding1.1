@@ -1,6 +1,7 @@
 const graphql = require("graphql");
 const User = require("../models/User");
 const Terms = require("../models/Terms");
+const Product = require("../models/Product");
 const registerUser = require("../utils/registerUser");
 const deleteUser = require("../utils/deleteUser");
 
@@ -10,6 +11,7 @@ const {
     GraphQLSchema,
     GraphQLID,
     GraphQLList,
+    GraphQLInt,
     GraphQLNonNull,
 } = graphql;
 
@@ -30,6 +32,46 @@ const TermType = new GraphQLObjectType({
         title: { type: GraphQLString },
     }),
 });
+
+const ProductType = new GraphQLObjectType({
+    name: "Products",
+    fields: () => ({
+        id: { type: GraphQLID },
+        number: { type: GraphQLString },
+        description: { type: GraphQLString },
+        inStock: { type: GraphQLInt },
+        totalShipped: { type: GraphQLInt },
+    }),
+});
+
+// status: String,
+//     number: String,
+//     company: String,
+//     marking: String,
+//     currency: String,
+//     specification: String,
+//     date: Date,
+//     delivery: {
+//         date: String,
+//         address: String,
+//     },
+//     terms: Terms,
+//     contact: {
+//         person: String,
+//         phone: String,
+//         fax: String,
+//         email: String,
+//     },
+//     products: [{
+//         product: Product,
+//         amount: Number,
+//         price: Number,
+//     }],
+//     totalPrice: Number,
+//     dateCreated: {
+//         type: Date,
+//         default: Date.now(),
+//     },
 
 // const AuthorType = new GraphQLObjectType({
 //     name: 'Author',
@@ -67,6 +109,12 @@ const RootQuery = new GraphQLObjectType({
             type: GraphQLList(TermType),
             resolve() {
                 return Terms.find({});
+            },
+        },
+        products: {
+            type: GraphQLList(ProductType),
+            resolve() {
+                return Product.find({});
             },
         },
     },

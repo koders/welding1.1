@@ -3,9 +3,12 @@ import * as classNames from "classnames";
 import { Button, Icon, Table as SemanticTable, Message, Loader } from "semantic-ui-react";
 import "./Table.scss";
 
-export const Table = ({ handleDelete, loading, error, data, cells, field }) => {
+export const Table = React.memo((props) => {
+    const { handleDelete, loading, error, data, cells, field, width } = props;
+    console.log("rendering table", props);
+
     return (
-        <div className={classNames("data-table", { loading })}>
+        <div className={classNames("data-table", { loading })} style={{ width: width || "400px"}}>
             <div className="loader">
                 <Loader active inline>Loading...</Loader>
             </div>
@@ -52,4 +55,4 @@ export const Table = ({ handleDelete, loading, error, data, cells, field }) => {
             </SemanticTable>
         </div>
     );
-};
+});

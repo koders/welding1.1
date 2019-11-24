@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
 const graphqlHTTP = require("express-graphql");
+const mysql = require("mysql");
+const Product = require("./models/Product");
 const config = require("./db");
 const schema = require("./schema/schema");
 
@@ -47,3 +49,31 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 });
+
+// const connection = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "admin",
+//     database: "welding",
+// });
+
+// connection.connect();
+
+// connection.query("SELECT * FROM welding.products;", (error, results) => {
+//     if (error) {
+//         throw error;
+//     }
+//     // console.log("Results: ", results);
+//     results.forEach(result => {
+//         const p = new Product({
+//             number: result.pno,
+//             description: result.desc,
+//             inStock: result.inStock,
+//             totalShipped: result.totalShipped,
+//         });
+//         p.save();
+//         console.log(p);
+//     });
+// });
+
+// connection.end();

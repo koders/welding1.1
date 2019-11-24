@@ -35,6 +35,11 @@ const DELETE_USER = gql`
     }
 `;
 
+const cells = [
+    {name: "Username", field: "username", width: 7},
+    {name: "Role", field: "role", width: 7},
+];
+
 export const Users = () => {
     const { loading, error, data } = useQuery(USERS);
     const [addUser, addUserError] = useMutation(ADD_USER);
@@ -83,7 +88,7 @@ export const Users = () => {
         } catch (e) {
             console.error(e);
         }
-    });
+    }, []);
 
     return (
         <div className="users">
@@ -100,10 +105,7 @@ export const Users = () => {
                 error={error}
                 data={data}
                 field="users"
-                cells={[
-                    {name: "Username", field: "username", width: 7},
-                    {name: "Role", field: "role", width: 7},
-                ]}
+                cells={cells}
             />
 
             <Modal open={show} size="tiny">

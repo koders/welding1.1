@@ -61,9 +61,7 @@ router.post("/", (req, res) => {
     User.findOne({ username })
         .then(user => {
             if (!user) {
-                errors.username = wrongPassError;
-                errors.password = wrongPassError;
-                return res.status(404).json(errors);
+                return res.status(404).json(wrongPassError);
             }
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
@@ -85,9 +83,7 @@ router.post("/", (req, res) => {
                             }
                         });
                     } else {
-                        errors.username = wrongPassError;
-                        errors.password = wrongPassError;
-                        return res.status(400).json(errors);
+                        return res.status(400).json(wrongPassError);
                     }
                 });
         });

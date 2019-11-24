@@ -11,6 +11,7 @@ export const Sidebar = ({ pathname }) => {
         {icon: "settings", title: "Administration", expanded: true, items:[
             {path: "/users", icon: "users", title: "Users"},
             {path: "/terms", icon: "truck", title: "Terms"},
+            {path: "/products", icon: "box", title: "Products"},
         ]},
         {path: "/invoices", icon: "file outline", title: "Invoices"},
         {path: "/statistics", icon: "line graph", title: "Statistics"},

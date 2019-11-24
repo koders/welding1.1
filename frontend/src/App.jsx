@@ -23,6 +23,7 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { Terms } from "./components/Terms/Terms";
 import { ToastProvider } from "react-toast-notifications";
+import { Products } from "./components/Products/Products";
 
 const apolloClient = new ApolloClient({
     uri: "http://localhost:3001/api",
@@ -94,6 +95,7 @@ const Container = ({ auth, location, history, logoutUser }) => {
                     <Route path="/orders" component={Orders} />
                     <Route path="/users" component={Users} />
                     <Route path="/terms" component={Terms} />
+                    <Route path="/products" component={Products} />
                     <Route path="/logout" render={renderLogout} />
                 </Switch>
             </div>

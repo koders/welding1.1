@@ -19,9 +19,9 @@ export const Table = React.memo((props) => {
             <div className="loader">
                 <Loader active inline>Loading...</Loader>
             </div>
-            <SemanticTable style={{ position: "relative" }}>
-                <SemanticTable.Header fullWidth style={{ display: "block" }}>
-                    <SemanticTable.Row style={{ display: "block" }}>
+            <SemanticTable style={{ position: "relative", display:"flex", flexDirection: "column" }}>
+                <SemanticTable.Header fullWidth>
+                    <SemanticTable.Row style={{ display: "flex" }}>
                         {cells.map(cell => (
                             <SemanticTable.HeaderCell key={cell.name} width={cell.width}>{cell.name}</SemanticTable.HeaderCell>
                         ))}

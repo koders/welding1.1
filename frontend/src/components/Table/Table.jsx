@@ -4,8 +4,15 @@ import { Button, Icon, Table as SemanticTable, Message, Loader } from "semantic-
 import "./Table.scss";
 
 export const Table = React.memo((props) => {
+    const [loadCount, setLoadCount] = React.useState(100);
+
     const { handleDelete, loading, error, data, cells, field, width } = props;
-    console.log("rendering table", props);
+
+    const onScroll = React.useCallback((e) => {
+        if (e.target.scrollHeight - (e.target.scrollTop + e.target.clientHeight) < 200 ) {
+            setLoadCount(loadCount + 2000);
+        }
+    }, [loadCount]);
 
     return (
         <div className={classNames("data-table", { loading })} style={{ width: width || "400px"}}>
@@ -13,15 +20,18 @@ export const Table = React.memo((props) => {
                 <Loader active inline>Loading...</Loader>
             </div>
             <SemanticTable style={{ position: "relative" }}>
-                <SemanticTable.Header fullWidth>
-                    <SemanticTable.Row>
+                <SemanticTable.Header fullWidth style={{ display: "block" }}>
+                    <SemanticTable.Row style={{ display: "block" }}>
                         {cells.map(cell => (
                             <SemanticTable.HeaderCell key={cell.name} width={cell.width}>{cell.name}</SemanticTable.HeaderCell>
                         ))}
                         <SemanticTable.HeaderCell width={2} />
                     </SemanticTable.Row>
                 </SemanticTable.Header>
-                <SemanticTable.Body>
+                <SemanticTable.Body
+                    style={{ display: "block", maxHeight: "500px", overflow: "auto" }}
+                    onScroll={onScroll}
+                >
                     {error && (
                         <SemanticTable.Row>
                             <SemanticTable.Cell colSpan="3">
@@ -37,11 +47,11 @@ export const Table = React.memo((props) => {
                             </SemanticTable.Cell>
                         </SemanticTable.Row>
                     )}
-                    {data && data[field].map(term => {
+                    {data && data[field].slice(0, loadCount).map(term => {
                         return (
                             <SemanticTable.Row key={term.id}>
                                 {cells.map(cell => (
-                                    <SemanticTable.Cell key={cell.name}>{term[cell.field]}</SemanticTable.Cell>
+                                    <SemanticTable.Cell key={cell.name} width={cell.width}>{term[cell.field]}</SemanticTable.Cell>
                                 ))}
                                 <SemanticTable.Cell>
                                     <Button icon color="red" value={term.id} onClick={handleDelete}>

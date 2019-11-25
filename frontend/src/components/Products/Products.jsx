@@ -18,17 +18,17 @@ const PRODUCTS = gql`
     }
 `;
 
-const ADD_TERMS = gql`
-    mutation AddTerms($title: String!){
-        addTerms(title: $title) {
-            title,
+const ADD_PRODUCT = gql`
+    mutation AddProduct($number: String!, $description: String!){
+        addProduct(number: $number, description: $description) {
+            id,
         }
     }
 `;
 
-const DELETE_TERMS = gql`
-    mutation deleteTerms($id: ID!){
-        deleteTerms(id: $id) {
+const DELETE_PRODUCT = gql`
+    mutation deleteProduct($id: ID!){
+        deleteProduct(id: $id) {
             id,
         }
     }
@@ -43,23 +43,26 @@ const cells = [
 
 export const Products = React.memo(() => {
     const { loading, error, data } = useQuery(PRODUCTS);
-    const [addTerms, addTermsError] = useMutation(ADD_TERMS);
-    const [deleteTerms] = useMutation(DELETE_TERMS);
+    const [addProduct, addProductError] = useMutation(ADD_PRODUCT);
+    const [deleteProduct] = useMutation(DELETE_PRODUCT);
 
     const [show, setShow] = React.useState(false);
-    const [field, setField] = React.useState("");
+    const [number, setNumber] = React.useState("");
+    const [description, setDescription] = React.useState("");
 
     const { addToast } = useToasts();
 
     const handleClose = React.useCallback(() => {
         setShow(false);
-        setField("");
+        setNumber("");
+        setDescription("");
     }, []);
     const handleShow = React.useCallback(() => setShow(true), []);
     const handleSave = React.useCallback(() => {
         try {
-            addTerms({ variables: {
-                title: field,
+            addProduct({ variables: {
+                number,
+                description,
             },
             refetchQueries: [{ query: PRODUCTS }] });
             handleClose();
@@ -67,12 +70,13 @@ export const Products = React.memo(() => {
         } catch (e) {
             console.error(e);
         }
-    }, [field]);
+    }, [number, description]);
 
-    const handleFieldChange = React.useCallback((e) => setField(e.target.value));
+    const handleNumberChange = React.useCallback((e) => setNumber(e.target.value));
+    const handleDescriptionChange = React.useCallback((e) => setDescription(e.target.value));
     const handleDelete = React.useCallback(({currentTarget}) => {
         try {
-            deleteTerms({ variables: {
+            deleteProduct({ variables: {
                 id: currentTarget.value,
             },
             refetchQueries: [{ query: PRODUCTS }] });
@@ -102,24 +106,30 @@ export const Products = React.memo(() => {
             />
 
             <Modal open={show} size="tiny">
-                <Modal.Header>New User</Modal.Header>
+                <Modal.Header>New Product</Modal.Header>
                 <Modal.Content>
-                    <Form error={!!addTermsError.error}>
+                    <Form error={!!addProductError.error}>
                         <Form.Input
-                            placeholder="Terms"
-                            label="Terms"
-                            onChange={ handleFieldChange }
-                            value={ field }
+                            placeholder="Number"
+                            label="Number"
+                            onChange={ handleNumberChange }
+                            value={ number }
+                        />
+                        <Form.Input
+                            placeholder="Description"
+                            label="Description"
+                            onChange={ handleDescriptionChange }
+                            value={ description }
                         />
                         <Form.Field>
                             <Message
                                 error
                                 header="Error"
-                                content={addTermsError.error && addTermsError.error.message}
+                                content={addProductError.error && addProductError.error.message}
                             />
                         </Form.Field>
                         <Button type="button" color="red" onClick={handleClose}>Cancel</Button>
-                        <Button color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
+                        <Button type="button" color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
                     </Form>
                 </Modal.Content>
             </Modal>

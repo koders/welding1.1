@@ -117,6 +117,14 @@ const RootQuery = new GraphQLObjectType({
                 return Product.find({});
             },
         },
+        product: {
+            type: ProductType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                const { id } = args;
+                return Product.findById(id);
+            },
+        },
     },
 });
 
@@ -165,6 +173,29 @@ const Mutation = new GraphQLObjectType({
                 const { id } = args;
                 const terms = await Terms.findById(id);
                 await terms.delete();
+            },
+        },
+        addProduct: {
+            type: ProductType,
+            args: {
+                number: { type: GraphQLNonNull(GraphQLString) },
+                description: { type: GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const { number, description } = args;
+                const product = new Product({ number, description });
+                return product.save();
+            },
+        },
+        deleteProduct: {
+            type: ProductType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(parent, args) {
+                const { id } = args;
+                const product = await Product.findById(id);
+                await product.delete();
             },
         },
     },

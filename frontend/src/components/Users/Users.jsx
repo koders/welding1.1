@@ -143,7 +143,7 @@ export const Users = () => {
                             />
                         </Form.Field>
                         <Button type="button" color="red" onClick={handleClose}>Cancel</Button>
-                        <Button color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
+                        <Button type="button" color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
                     </Form>
                 </Modal.Content>
             </Modal>

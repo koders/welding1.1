@@ -93,7 +93,7 @@ export const Terms = () => {
             />
 
             <Modal open={show} size="tiny">
-                <Modal.Header>New User</Modal.Header>
+                <Modal.Header>New Terms</Modal.Header>
                 <Modal.Content>
                     <Form error={!!addTermsError.error}>
                         <Form.Input
@@ -110,7 +110,7 @@ export const Terms = () => {
                             />
                         </Form.Field>
                         <Button type="button" color="red" onClick={handleClose}>Cancel</Button>
-                        <Button color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
+                        <Button type="button" color="green" icon onClick={handleSave}><Icon name="user plus" /> Save</Button>
                     </Form>
                 </Modal.Content>
             </Modal>

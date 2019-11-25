@@ -11,8 +11,14 @@ const ProductSchema = new Schema({
         type: String,
         required: true,
     },
-    inStock: Number,
-    totalShipped: Number,
+    inStock: {
+        type: Number,
+        default: 0,
+    },
+    totalShipped: {
+        type: Number,
+        default: 0,
+    },
     // category: Category,
     // material,
     // model,
